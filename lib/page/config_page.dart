@@ -1,7 +1,7 @@
 
-import 'package:aksaragen/drawing_page.dart';
+import 'package:aksaragen/page/drawing_page.dart';
 import 'package:flutter/material.dart';
-import 'package:aksaragen/aboutapp_page.dart';
+import 'package:aksaragen/page/aboutapp_page.dart';
 
 class ConfigPage extends StatefulWidget {
   const ConfigPage({ super.key });
