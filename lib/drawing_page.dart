@@ -5,7 +5,18 @@ import 'package:signature/signature.dart';
 import 'package:aksaragen/utils/utils.dart';
 
 class DrawingPage extends StatefulWidget {
-  const DrawingPage({super.key});
+  final double canvasWidth;
+  final double canvasHeight;
+  final double penStrokeWidth;
+  final String canvasImageLable;
+
+  const DrawingPage({
+    super.key, 
+    required this.canvasWidth,
+    required this.canvasHeight, 
+    required this.penStrokeWidth, 
+    required this.canvasImageLable,
+  });
 
   @override
   State<DrawingPage> createState() => _DrawingPageState();
@@ -23,65 +34,76 @@ class _DrawingPageState extends State<DrawingPage> {
           child: Text("Drawing Page"),
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(
-              width: 246,
-              child: Text("label"),
-            ),
-            Container(
-              width: 246,
-              height: 246,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1)
-              ),
-              child: Signature(
-                controller: _signatureController,
-                width: 244.0,
-                height: 244.0,
-                backgroundColor: Colors.lightBlue[100]!,
-              ),
-            ),
-            Container(
-              width: 246,
-              padding: const EdgeInsets.only(top: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        _signatureController.clear();
-                      });
-                    }, 
-                    icon: const Icon(Icons.undo_outlined), 
-                    label: const Text("clear")
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                width: widget.canvasWidth,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    widget.canvasImageLable,
+                    style: const TextStyle(
+                      fontSize: 17,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(width: 24),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      Uint8List? canvasImage = await _signatureController.toPngBytes(
-                        width: 244, height: 244,
-                      );
-                      
-                      if(canvasImage != null) {
-                        String? res = await saveUint8ListToImageFile(
-                          bytesData: canvasImage, 
-                          fileName: "image"
+                ),
+              ),
+              Container(
+                width: widget.canvasWidth,
+                height: widget.canvasHeight,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1)
+                ),
+                child: Signature(
+                  controller: _signatureController,
+                  width: widget.canvasWidth,
+                  height: widget.canvasHeight,
+                  backgroundColor: Colors.lightBlue[100]!,
+                ),
+              ),
+              Container(
+                width: widget.canvasWidth,
+                padding: const EdgeInsets.only(top: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          _signatureController.clear();
+                        });
+                      }, 
+                      icon: const Icon(Icons.undo_outlined), 
+                      label: const Text("clear")
+                    ),
+                    const SizedBox(width: 24),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        Uint8List? canvasImage = await _signatureController.toPngBytes(
+                          width: widget.canvasWidth.toInt(), 
+                          height: widget.canvasHeight.toInt(),
                         );
-                        if(res != null) showSnackbar();
-                      }
-                    }, 
-                    icon: const Icon(Icons.save), 
-                    label: const Text("save")
-                  ),
-                ],
-              ),
-            )
-          ],
-        )
+                        if(canvasImage != null) {
+                          String? res = await saveUint8ListToImageFile(
+                            bytesData: canvasImage, 
+                            fileName: widget.canvasImageLable,
+                          );
+                          if(res != null) showSnackbar();
+                        }
+                      }, 
+                      icon: const Icon(Icons.save), 
+                      label: const Text("save")
+                    ),
+                  ],
+                ),
+              )
+            ],
+          )
+        ),
       ),
       
     );
@@ -91,7 +113,7 @@ class _DrawingPageState extends State<DrawingPage> {
   void initState() {
     super.initState();
     _signatureController = SignatureController(
-      penStrokeWidth: 3.0,
+      penStrokeWidth: widget.penStrokeWidth,
       penColor: Colors.black,
       exportBackgroundColor: Colors.white,
       exportPenColor: Colors.black,

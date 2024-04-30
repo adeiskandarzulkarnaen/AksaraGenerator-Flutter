@@ -10,7 +10,19 @@ class AboutAppPage extends StatelessWidget {
         title: const Text("Aboutapp"),
       ),
       body: const Center(
-        child: Text("Aksara Generator")
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Aksara Generator",
+              style: TextStyle(
+                fontSize: 24.0
+              ),
+            ),
+            SizedBox(height: 8),
+            Text("© 2024 adeiskandarzulkarnaen"),
+          ],
+        )
       ),
     );
   }
