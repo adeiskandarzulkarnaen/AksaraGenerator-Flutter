@@ -90,15 +90,16 @@ class _ConfigPageState extends State<ConfigPage> {
                       fontSize: 14,
                     ),
                     decoration: const InputDecoration(
-                      labelText: "Penstroke Width",
-                      hintText: "input pen stroke width",
+                      labelText: "Pen Width",
+                      hintText: "input penstroke width",
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
                     validator: (String? value) {
                       if (value!.isEmpty) return "please fill out this field";
                       if (int.tryParse(value) == null) return "penwidth must be a number type";
-                      if (int.parse(value) > 40.0) return "penwidth not allowed more than 40 pixel";
+                      if (int.parse(value) < 1) return "penwidth not allowed less than 1 pixel";
+                      if (int.parse(value) > 24) return "penwidth not allowed more than 24 pixel";
                       return null;
                     },
                   ),
@@ -121,7 +122,8 @@ class _ConfigPageState extends State<ConfigPage> {
                     validator: (String? value) {
                       if (value!.isEmpty) return "please fill out this field";
                       if (int.tryParse(value) == null) return "canvas width must be a number type";
-                      if (int.parse(value) > maxCanvasWidth.toInt()) return "canvaswidth not allowed more than ${maxCanvasWidth.toInt()} pixel";
+                      if (int.parse(value) < 28) return "canvaswidth not allowed less than 28 pixel)";
+                      if (int.parse(value) > maxCanvasWidth.toInt()) return "canvaswidth not allowed more than screenwidth (${maxCanvasWidth.toInt()} pixel)";
                       return null;
                     },
                   ),
@@ -144,7 +146,8 @@ class _ConfigPageState extends State<ConfigPage> {
                     validator: (String? value) {
                       if (value!.isEmpty) return "please fill out this field";
                       if (int.tryParse(value) == null) return "canvas height must be a number type";
-                      if (int.parse(value) > maxCanvasHeight.toInt()) return "canvasheight not allowed more than ${maxCanvasHeight.toInt()} pixel";
+                      if (int.parse(value) < 28) return "canvasheight not allowed less than 28 pixel)";
+                      if (int.parse(value) > maxCanvasHeight.toInt()) return "canvasheight not allowed more than screenheight (${maxCanvasHeight.toInt()} pixel)";
                       return null;  
                     },
                   ),

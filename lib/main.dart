@@ -4,6 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:aksaragen/page/config_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp ]);
+
   runApp(const MyApp());
 }
 
@@ -11,16 +15,14 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-    
+  Widget build(BuildContext context) {    
     return MaterialApp(
       title: 'Aksara Generator',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: false,
         appBarTheme: const AppBarTheme(
-          toolbarHeight: 80,
+          systemOverlayStyle: SystemUiOverlayStyle.dark
         ),
       ),
       home: const ConfigPage()
