@@ -1,6 +1,6 @@
 
-import 'package:aksaragen/page/drawing_page.dart';
 import 'package:flutter/material.dart';
+import 'package:aksaragen/page/drawing_page.dart';
 import 'package:aksaragen/page/aboutapp_page.dart';
 
 class ConfigPage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _ConfigPageState extends State<ConfigPage> {
 
   @override
   Widget build(BuildContext context) {
-    double maxCanvasWidth  = MediaQuery.of(context).size.width - 20;     // overflow horizontal = 8
+    double maxCanvasWidth  = MediaQuery.of(context).size.width - 20;    // overflow horizontal = 8
     double maxCanvasHeight = MediaQuery.of(context).size.height - 200;  // overflow vertikal = 160
 
     return Scaffold(
@@ -55,11 +55,16 @@ class _ConfigPageState extends State<ConfigPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 /* application logo */
-                const FlutterLogo(
-                  size: 120,
-                  style: FlutterLogoStyle.horizontal,
+                SizedBox(
+                  width: 165,
+                  child: AspectRatio(
+                    aspectRatio: 1/ 1,
+                    child: Image.asset(
+                      'assets/handwriting.png',
+                    ),
+                  ),
                 ),
-                
+
                 /* canvas Image Label input*/
                 Padding(
                   padding: const EdgeInsets.only(top: 24.0),

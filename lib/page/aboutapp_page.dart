@@ -9,18 +9,27 @@ class AboutAppPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Aboutapp"),
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            SizedBox(
+              width: 165,
+              child: AspectRatio(
+                aspectRatio: 1/ 1,
+                child: Image.asset(
+                  'assets/handwriting.png',
+                ),
+              ),
+            ),
+            const Text(
               "Aksara Generator",
               style: TextStyle(
                 fontSize: 24.0
               ),
             ),
-            SizedBox(height: 8),
-            Text("© 2024 adeiskandarzulkarnaen"),
+            const SizedBox(height: 8),
+            const Text("© 2024 adeiskandarzulkarnaen"),
           ],
         )
       ),
