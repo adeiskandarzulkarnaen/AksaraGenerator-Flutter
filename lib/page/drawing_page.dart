@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
@@ -24,6 +25,23 @@ class DrawingPage extends StatefulWidget {
 
 class _DrawingPageState extends State<DrawingPage> {
   late final SignatureController _signatureController;
+
+  @override
+  void initState() {
+    super.initState();
+    _signatureController = SignatureController(
+      penStrokeWidth: widget.penStrokeWidth,
+      penColor: Colors.black,
+      exportBackgroundColor: Colors.white,
+      exportPenColor: Colors.black,
+    );
+  }
+
+  @override
+  void dispose() {
+    _signatureController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,17 +101,7 @@ class _DrawingPageState extends State<DrawingPage> {
                     const SizedBox(width: 24),
                     ElevatedButton.icon(
                       onPressed: () async {
-                        Uint8List? canvasImage = await _signatureController.toPngBytes(
-                          width: widget.canvasWidth.toInt(), 
-                          height: widget.canvasHeight.toInt(),
-                        );
-                        if(canvasImage != null) {
-                          String? res = await saveUint8ListToImageFile(
-                            bytesData: canvasImage, 
-                            fileName: widget.canvasImageLable,
-                          );
-                          if(res != null) showSnackbar();
-                        }
+                        await saveSignature();
                       }, 
                       icon: const Icon(Icons.save), 
                       label: const Text("save")
@@ -105,32 +113,31 @@ class _DrawingPageState extends State<DrawingPage> {
           )
         ),
       ),
-      
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _signatureController = SignatureController(
-      penStrokeWidth: widget.penStrokeWidth,
-      penColor: Colors.black,
-      exportBackgroundColor: Colors.white,
-      exportPenColor: Colors.black,
+  Future<void> saveSignature() async {
+    Uint8List? exportedCanvasImage = await _signatureController.toPngBytes(
+      width: widget.canvasWidth.toInt(), 
+      height: widget.canvasHeight.toInt(),
     );
+    if (exportedCanvasImage != null) {
+      // todo: save image
+      File res = await saveImageFileToApplicationDownloadDirectory(
+        bytesImageData: exportedCanvasImage,
+        fileName: widget.canvasImageLable,
+      );
+      showSnackbar('Save success: ${res.path}');
+    }
   }
 
-  @override
-  void dispose() {
-    _signatureController.dispose();
-    super.dispose();
-  }
-
-  void showSnackbar() {
+  void showSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('save success!!'),
-        duration: Duration(seconds: 2),
+      SnackBar(
+        content: Center(
+          child: Text(message)
+        ),
+        duration: const Duration(seconds: 3),
       ),
     );
   }
