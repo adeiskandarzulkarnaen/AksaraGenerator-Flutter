@@ -24,19 +24,19 @@ Future<File> convertUint8ListToFile({
  * Jika download directory tidak dapat di akses oleh platform,
  * makan file akan disimpan ke folder download milik aplikasi.
  */
-Future<File> saveImageFileToApplicationDownloadDirectory({
-  required Uint8List bytesImageData,
+Future<String> saveImageFileToApplicationDownloadDirectory({
+  required Uint8List bytesData,
   required String fileName,
 }) async {
   String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
 
   /* get application download directory */
   String downloadDir = (await getDownloadsDirectory())!.path;
-  String imagePath = '$downloadDir/${timeStamp}_$fileName.png';
+  String imagePath = '$downloadDir/${timeStamp}_label-$fileName.png';
 
   File imageFile = File(imagePath);
-  await imageFile.writeAsBytes(bytesImageData);
-  return imageFile;
+  await imageFile.writeAsBytes(bytesData);
+  return imageFile.path;
 }
 
 /*
@@ -51,7 +51,7 @@ Future<String?> saveImageFileWithFileDialog({
 
   File tempFile = await convertUint8ListToFile(
     bytesData: bytesData, 
-    fileNameFormat: "${timeStamp}_$fileName.png"
+    fileNameFormat: "${timeStamp}_label-$fileName.png"
   );
 
   String? filePath = await FlutterFileDialog.saveFile(

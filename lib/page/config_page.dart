@@ -19,6 +19,24 @@ class _ConfigPageState extends State<ConfigPage> {
   final GlobalKey<FormState> _formConfigKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    _imageWidthForm = TextEditingController();
+    _imageHeightForm = TextEditingController();
+    _imagePenStrokeWidth = TextEditingController();
+    _imageLabelForm = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _imageWidthForm.dispose();
+    _imageHeightForm.dispose();
+    _imagePenStrokeWidth.dispose();
+    _imageLabelForm.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double maxCanvasWidth  = MediaQuery.of(context).size.width - 20;    // overflow horizontal = 8
     double maxCanvasHeight = MediaQuery.of(context).size.height - 200;  // overflow vertikal = 160
@@ -186,24 +204,6 @@ class _ConfigPageState extends State<ConfigPage> {
         backgroundColor: Colors.deepPurple,
       ),
     );
-  }
-
-  @override
-  void initState() {
-    _imageWidthForm = TextEditingController();
-    _imageHeightForm = TextEditingController();
-    _imagePenStrokeWidth = TextEditingController();
-    _imageLabelForm = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _imageWidthForm.dispose();
-    _imageHeightForm.dispose();
-    _imagePenStrokeWidth.dispose();
-    _imageLabelForm.dispose();
-    super.dispose();
   }
 }
 

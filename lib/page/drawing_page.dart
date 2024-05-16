@@ -1,4 +1,4 @@
-import 'dart:io';
+// import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
@@ -121,14 +121,15 @@ class _DrawingPageState extends State<DrawingPage> {
       width: widget.canvasWidth.toInt(), 
       height: widget.canvasHeight.toInt(),
     );
-    if (exportedCanvasImage != null) {
-      // todo: save image
-      File res = await saveImageFileToApplicationDownloadDirectory(
-        bytesImageData: exportedCanvasImage,
-        fileName: widget.canvasImageLable,
-      );
-      showSnackbar('Save success: ${res.path}');
-    }
+    if (exportedCanvasImage == null) return;
+
+    // todo: save image
+    // String res = await saveImageFileToApplicationDownloadDirectory(
+    String? res = await saveImageFileWithFileDialog(
+      bytesData: exportedCanvasImage,
+      fileName: widget.canvasImageLable,
+    );
+    showSnackbar('Save success: $res');
   }
 
   void showSnackbar(String message) {
@@ -137,7 +138,7 @@ class _DrawingPageState extends State<DrawingPage> {
         content: Center(
           child: Text(message)
         ),
-        duration: const Duration(seconds: 3),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
