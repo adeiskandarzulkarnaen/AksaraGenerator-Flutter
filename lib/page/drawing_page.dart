@@ -95,7 +95,7 @@ class _DrawingPageState extends State<DrawingPage> {
                           _signatureController.clear();
                         });
                       }, 
-                      icon: const Icon(Icons.undo_outlined), 
+                      icon: const Icon(Icons.delete_sweep_outlined), 
                       label: const Text("clear")
                     ),
                     const SizedBox(width: 24),
@@ -124,12 +124,12 @@ class _DrawingPageState extends State<DrawingPage> {
     if (exportedCanvasImage == null) return;
 
     // todo: save image
-    // String res = await saveImageFileToApplicationDownloadDirectory(
-    String? res = await saveImageFileWithFileDialog(
+    // String path = await saveImageFile(
+    String? path = await saveImageFileWithFileDialog(
       bytesData: exportedCanvasImage,
       fileName: widget.canvasImageLable,
     );
-    showSnackbar('Save success: $res');
+    if(path != null) showSnackbar('Save success: $path');
   }
 
   void showSnackbar(String message) {

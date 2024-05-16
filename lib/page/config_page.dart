@@ -71,7 +71,7 @@ class _ConfigPageState extends State<ConfigPage> {
             key: _formConfigKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 /* application logo */
                 SizedBox(
                   width: 165,
@@ -82,6 +82,7 @@ class _ConfigPageState extends State<ConfigPage> {
                     ),
                   ),
                 ),
+                const Text("Aksara Generator"),
 
                 /* canvas Image Label input*/
                 Padding(
@@ -145,7 +146,7 @@ class _ConfigPageState extends State<ConfigPage> {
                     validator: (String? value) {
                       if (value!.isEmpty) return "please fill out this field";
                       if (int.tryParse(value) == null) return "canvas width must be a number type";
-                      if (int.parse(value) < 28) return "canvaswidth not allowed less than 28 pixel)";
+                      if (int.parse(value) < 28) return "canvaswidth not allowed less than 28 pixel";
                       if (int.parse(value) > maxCanvasWidth.toInt()) return "canvaswidth not allowed more than screenwidth (${maxCanvasWidth.toInt()} pixel)";
                       return null;
                     },

@@ -24,7 +24,7 @@ Future<File> convertUint8ListToFile({
  * Jika download directory tidak dapat di akses oleh platform,
  * makan file akan disimpan ke folder download milik aplikasi.
  */
-Future<String> saveImageFileToApplicationDownloadDirectory({
+Future<String> saveImageFile({
   required Uint8List bytesData,
   required String fileName,
 }) async {
