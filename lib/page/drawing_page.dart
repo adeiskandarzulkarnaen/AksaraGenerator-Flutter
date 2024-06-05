@@ -1,23 +1,15 @@
 // import 'dart:io';
+
 import 'dart:typed_data';
+import 'package:aksaragen/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
 
 import 'package:aksaragen/utils/utils.dart';
 
 class DrawingPage extends StatefulWidget {
-  final double canvasWidth;
-  final double canvasHeight;
-  final double penStrokeWidth;
-  final String canvasImageLable;
-
-  const DrawingPage({
-    super.key, 
-    required this.canvasWidth,
-    required this.canvasHeight, 
-    required this.penStrokeWidth, 
-    required this.canvasImageLable,
-  });
+  final Storage storage;
+  const DrawingPage({super.key, required this.storage});
 
   @override
   State<DrawingPage> createState() => _DrawingPageState();
@@ -25,12 +17,17 @@ class DrawingPage extends StatefulWidget {
 
 class _DrawingPageState extends State<DrawingPage> {
   late final SignatureController _signatureController;
+  late double canvasWidth;
+  late double canvasHeight;
+  late double penStrokeWidth;
+  late String canvasImageName;
 
   @override
   void initState() {
     super.initState();
+    _loadConfiguration();
     _signatureController = SignatureController(
-      penStrokeWidth: widget.penStrokeWidth,
+      penStrokeWidth: penStrokeWidth,
       penColor: Colors.black,
       exportBackgroundColor: Colors.white,
       exportPenColor: Colors.black,
@@ -49,20 +46,32 @@ class _DrawingPageState extends State<DrawingPage> {
       appBar: AppBar(
         title: const Padding(
           padding: EdgeInsets.only(left: 12.0),
-          child: Text("Drawing Page"),
+          child: Text("AksaraGenerator"),
         ),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 24.0,),
+            child: IconButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/config');
+              }, 
+              icon: const Icon(Icons.settings)
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
-        child: Center(
+        child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
+              /* image name */
               SizedBox(
-                width: widget.canvasWidth,
+                width: canvasWidth,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    widget.canvasImageLable,
+                    canvasImageName,
                     style: const TextStyle(
                       fontSize: 17,
                     ),
@@ -70,21 +79,25 @@ class _DrawingPageState extends State<DrawingPage> {
                   ),
                 ),
               ),
+
+              /* canvas */
               Container(
-                width: widget.canvasWidth,
-                height: widget.canvasHeight,
+                width: canvasWidth,
+                height: canvasHeight,
                 decoration: BoxDecoration(
                   border: Border.all(width: 1)
                 ),
                 child: Signature(
                   controller: _signatureController,
-                  width: widget.canvasWidth,
-                  height: widget.canvasHeight,
+                  width: canvasWidth,
+                  height: canvasHeight,
                   backgroundColor: Colors.lightBlue[100]!,
                 ),
               ),
+
+              /* button */
               Container(
-                width: widget.canvasWidth,
+                width: double.infinity,
                 padding: const EdgeInsets.only(top: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -95,10 +108,10 @@ class _DrawingPageState extends State<DrawingPage> {
                           _signatureController.clear();
                         });
                       }, 
-                      icon: const Icon(Icons.delete_sweep_outlined), 
+                      icon: const Icon(Icons.delete_outline), 
                       label: const Text("clear")
                     ),
-                    const SizedBox(width: 24),
+                    const SizedBox(width: 14),
                     ElevatedButton.icon(
                       onPressed: () async {
                         await saveSignature();
@@ -110,16 +123,23 @@ class _DrawingPageState extends State<DrawingPage> {
                 ),
               )
             ],
-          )
+          ),
         ),
       ),
     );
   }
 
+  void _loadConfiguration() {
+    canvasWidth = widget.storage.getCanvasWidth() ?? 28;
+    canvasHeight = widget.storage.getCanvasHeight() ?? 28;
+    penStrokeWidth = widget.storage.getPenStrokeWidth() ?? 1;
+    canvasImageName = widget.storage.getImageName() ?? "img";
+  }
+
   Future<void> saveSignature() async {
     Uint8List? exportedCanvasImage = await _signatureController.toPngBytes(
-      width: widget.canvasWidth.toInt(), 
-      height: widget.canvasHeight.toInt(),
+      width: canvasWidth.toInt(), 
+      height: canvasHeight.toInt(),
     );
     if (exportedCanvasImage == null) return;
 
@@ -127,7 +147,7 @@ class _DrawingPageState extends State<DrawingPage> {
     // String path = await saveImageFile(
     String? path = await saveImageFileWithFileDialog(
       bytesData: exportedCanvasImage,
-      fileName: widget.canvasImageLable,
+      fileName: canvasImageName,
     );
     if(path != null) showSnackbar('Save success: $path');
   }
@@ -138,7 +158,7 @@ class _DrawingPageState extends State<DrawingPage> {
         content: Center(
           child: Text(message)
         ),
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 1),
       ),
     );
   }
