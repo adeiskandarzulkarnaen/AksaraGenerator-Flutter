@@ -1,11 +1,13 @@
 
-import 'package:aksaragen/page/aboutapp_page.dart';
-import 'package:aksaragen/page/drawing_page.dart';
-import 'package:aksaragen/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:aksaragen/page/configuration_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+
+import 'page/aboutapp_page.dart';
+import 'page/configuration_page.dart';
+import 'page/drawing_page.dart';
+import 'utils/storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

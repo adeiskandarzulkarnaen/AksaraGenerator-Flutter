@@ -1,11 +1,11 @@
 // import 'dart:io';
 
 import 'dart:typed_data';
-import 'package:aksaragen/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
 
-import 'package:aksaragen/utils/utils.dart';
+import '../utils/storage.dart';
+import '../utils/utils.dart';
 
 class DrawingPage extends StatefulWidget {
   final Storage storage;
@@ -25,7 +25,11 @@ class _DrawingPageState extends State<DrawingPage> {
   @override
   void initState() {
     super.initState();
-    _loadConfiguration();
+    canvasWidth = widget.storage.getCanvasWidth()!;
+    canvasHeight = widget.storage.getCanvasHeight()!;
+    penStrokeWidth = widget.storage.getPenStrokeWidth()!;
+    canvasImageName = widget.storage.getImageName()!;
+
     _signatureController = SignatureController(
       penStrokeWidth: penStrokeWidth,
       penColor: Colors.black,
@@ -50,7 +54,7 @@ class _DrawingPageState extends State<DrawingPage> {
         ),
         actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(right: 24.0,),
+            padding: const EdgeInsets.only(right: 12.0),
             child: IconButton(
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/config');
@@ -116,7 +120,7 @@ class _DrawingPageState extends State<DrawingPage> {
                       onPressed: () async {
                         await saveSignature();
                       }, 
-                      icon: const Icon(Icons.save), 
+                      icon: const Icon(Icons.save_alt_outlined), 
                       label: const Text("save")
                     ),
                   ],
@@ -129,13 +133,6 @@ class _DrawingPageState extends State<DrawingPage> {
     );
   }
 
-  void _loadConfiguration() {
-    canvasWidth = widget.storage.getCanvasWidth() ?? 28;
-    canvasHeight = widget.storage.getCanvasHeight() ?? 28;
-    penStrokeWidth = widget.storage.getPenStrokeWidth() ?? 1;
-    canvasImageName = widget.storage.getImageName() ?? "img";
-  }
-
   Future<void> saveSignature() async {
     Uint8List? exportedCanvasImage = await _signatureController.toPngBytes(
       width: canvasWidth.toInt(), 
@@ -143,7 +140,7 @@ class _DrawingPageState extends State<DrawingPage> {
     );
     if (exportedCanvasImage == null) return;
 
-    // todo: save image
+    // Save Image
     // String path = await saveImageFile(
     String? path = await saveImageFileWithFileDialog(
       bytesData: exportedCanvasImage,

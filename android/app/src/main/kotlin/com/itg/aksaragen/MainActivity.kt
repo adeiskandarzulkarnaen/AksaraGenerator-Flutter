@@ -1,4 +1,4 @@
-package com.example.aksaragen
+package com.itg.aksaragen
 
 import io.flutter.embedding.android.FlutterActivity
 

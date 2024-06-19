@@ -1,6 +1,6 @@
 
-import 'package:aksaragen/utils/storage.dart';
 import 'package:flutter/material.dart';
+import '../utils/storage.dart';
 
 class ConfigurationPage extends StatefulWidget {
   final Storage storage;
